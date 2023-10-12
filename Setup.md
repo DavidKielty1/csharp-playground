@@ -7,6 +7,7 @@ Dotnet CLI
 Microsoft.EntityFrameworkCore.Designer
 Microsoft.EntityFrameworkCore.Core
 Microsoft.EntityFrameworkCore.Sqlite
+Dotnet EF tool
 mkcert, /client/ssl -> mkcert 'localhost'
 
 mkcert -> angular.json
@@ -21,6 +22,7 @@ Angular
 
 ## Processes:
 
+_Priliminary_
 API.csproj -> <ImplicitUsings>enable</ImplicitUsings>
 appsettings.development -> "Logging": {"LogLevel": {"Default": "Information","Microsoft.AspNetCore": "Information"}},
 "ConnectionStrings": {"DefaultConnection": "Data source=geekmeet.db" }
@@ -39,3 +41,7 @@ package.json boostrap, ngx-boostrap. Dev: tslib
 Data/DbContext
 database(SQLite) -> program.cs + appsettings.Development.json: Connecting: DefaultString
 CORS: allow https:4200, link up with client serve
+
+Dotnet EF -> add migrations [name], database update. Create first database push.
+
+_Auth, controllers_
