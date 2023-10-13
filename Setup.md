@@ -4,11 +4,12 @@ Angular
 Node
 Angular CLI
 Dotnet CLI
-Microsoft.EntityFrameworkCore.Designer
-Microsoft.EntityFrameworkCore.Core
-Microsoft.EntityFrameworkCore.Sqlite
-Dotnet EF tool
-mkcert, /client/ssl -> mkcert 'localhost'
+Microsoft.EntityFrameworkCore.Designer - For Database
+Microsoft.EntityFrameworkCore.Core - For Database
+Microsoft.EntityFrameworkCore.Sqlite - For Database
+Dotnet EF -For tool Database migrations and updates
+mkcert, /client/ssl -> mkcert 'localhost' - For Making perm and key for SSL, HTTPS
+System.IdentityModel.Tokens.Jwt - For Tokens - NuGet Package (Ctrl Shift P - Open NuGet Gallery)
 
 mkcert -> angular.json
 boostrap -> angular.json
