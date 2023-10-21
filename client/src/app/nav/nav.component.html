@@ -1,7 +1,8 @@
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
   <div class="container">
     <a class="navbar-brand" href="#">GeekMeet</a>
-    <ul class="navbar-nav me-auto mb-2 mb-md-0">
+
+    <ul class="navbar-nav me-auto mb-2 mb-md-0" *ngIf="loggedIn">
       <li class="nav-item">
         <a class="nav-link" href="#">Matches</a>
       </li>
@@ -12,11 +13,31 @@
         <a class="nav-link">Messages</a>
       </li>
     </ul>
+
+    <div class="dropdown" *ngIf="loggedIn" dropdown>
+      <a
+        href=""
+        class="dropdown-toggle text-light text-decoration-none"
+        dropdownToggle
+        (click)="(false)"
+        >Welcome user</a
+      >
+      <ul class="dropdown-menu" *dropdownMenu>
+        <li>
+          <a href="" class="dropdown-item">Edit Profile</a>
+        </li>
+        <li>
+          <a href="" class="dropdown-item" (click)="logout()">Logout</a>
+        </li>
+      </ul>
+    </div>
+
     <form
       #loginForm="ngForm"
       class="d-flex"
       (ngSubmit)="login()"
       autocomplete="off"
+      *ngIf="!loggedIn"
     >
       <input
         name="username"
