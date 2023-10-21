@@ -21,13 +21,13 @@ public class TokenService : ITokenService
             new Claim(JwtRegisteredClaimNames.NameId, user.UserName)
         };
 
-        var creds = SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
+        var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
             Expires = DateTime.Now.AddDays(7),
-            SigningCredentials = (SigningCredentials)creds
+            SigningCredentials = creds
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -35,11 +35,6 @@ public class TokenService : ITokenService
         var token = tokenHandler.CreateToken(tokenDescriptor);
 
         return tokenHandler.WriteToken(token);
-    }
-
-    private object SigningCredentials(SymmetricSecurityKey key, string hmacSha512Signature)
-    {
-        throw new NotImplementedException();
     }
 }
 
