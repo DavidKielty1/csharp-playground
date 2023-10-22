@@ -58,3 +58,21 @@ Account: Register and Login. JwtToken logic. Hashing, salts, secrets.
 User: [Authorize] root, [AllowAnonymous] GetAll.
 Services: AddIdentityServices.
 Middleware: use app.UseAuthentication(); app.UseAuthorization();
+
+_Seeting up Angular navbar/homepage components. Conditional rendering_
+Angular CLI ng g c, ng g s. Generate component/service.
+Angular template forms.
+. #registerForm="ngForm", ngSubmit="register()",
+. [(ngModel)]="model.username", [(ngModel)]="model.password",
+. type="submit" (click)="register()", type="button" (click)="cancel()".
+Angular Services: client/src/app/services/acount.service.ts.
+. Dependency injection. Service lasts throughout entire browsing lifecycle. Component lasts as long as component is rendered on the screen.
+. Service is injected into app. private currentUserSource = new BehaviorSubject<User | null>(null); behaviourSubject currentUser$ can be get and set.
+. Observable get - currentUser$ = this.currentUserSource.asObservable();,
+. next: set - this.currentUserSource.next(user);
+Structural directives: Parent -> child; child -> parent component communications. Input output properties.
+. Within html template: \*ngIf="registerMode" <app-register(cancelRegister)="cancelRegisterMode($event)"></app-register>
+. @Input() component: function () => {};  template: [propname]="prop name".
+. @Output() component: cancelRegister = new EventEmitter(); template: (cancelRegister)="cancelRegisterMode($event)".
+Post: constructor(private http: HttpClient) {}, this.http.get('https://localhost:5001/api/users').
+.subscribe({next: (response) => (this.users = response), error, complete}).
