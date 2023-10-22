@@ -76,3 +76,5 @@ Structural directives: Parent -> child; child -> parent component communications
 . @Output() component: cancelRegister = new EventEmitter(); template: (cancelRegister)="cancelRegisterMode($event)".
 Post: constructor(private http: HttpClient) {}, this.http.get('https://localhost:5001/api/users').
 .subscribe({next: (response) => (this.users = response), error, complete}).
+
+test
