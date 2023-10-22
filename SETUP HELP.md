@@ -59,7 +59,7 @@ User: [Authorize] root, [AllowAnonymous] GetAll.
 Services: AddIdentityServices.
 Middleware: use app.UseAuthentication(); app.UseAuthorization();
 
-_Seeting up Angular navbar/homepage components. Conditional rendering_
+_Setting up Angular navbar/homepage components. Conditional rendering_
 Angular CLI ng g c/s; generate component/service.
 Angular template forms.
 . {#registerForm="ngForm", ngSubmit="register()",
