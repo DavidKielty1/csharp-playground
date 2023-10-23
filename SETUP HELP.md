@@ -12,8 +12,10 @@ mkcert, /client/ssl -> mkcert 'localhost' - For Making perm and key for SSL, HTT
 System.IdentityModel.Tokens.Jwt - For Tokens - NuGet Package (Ctrl Shift P - Open NuGet Gallery)
 microsoft.aspnetcore.authentication (Nuget Gallery)
 
-mkcert -> angular.json
-boostrap -> angular.json
+mkcert -> angular.json. serve/options
+boostrap -> angular.json. styles
+bootswatch theme -> angular.json. styles
+ngx-toastr -> angular.json. styles
 
 ## VSCode Extensions:
 
@@ -76,3 +78,18 @@ Structural directives: Parent/child component communication. Input output proper
 . @Output() component: cancelRegister = new EventEmitter(); template: (cancelRegister)="cancelRegisterMode($event)".}
 Post: {constructor(private http: HttpClient) {}, this.http.get('https://localhost:5001/api/users')
 .subscribe({next: (response) => (this.users = response), error, complete})}.
+
+_Angular Routing_
+Components, not pages.
+<a routerLink="/home" routerLinkActive="active">Link</a>
+Route AuthGuard. Private, session based auth.
+. app-routing.module: wrap one/all routes with {runGuardsAndResolvers: 'always', canActivate: [authGuard], children: [ {path}, {path}, {path}]}.
+. html-template: <ngcontainer \*ngIf="accountService.currentUser$ | async"><li>Link</li><li>Link</li></ngcontainer>.
+
+\*extras:
+
+- Bootstrap theme, bootswatch
+  Toast - error messages within login, register methods.
+  sharedModule - holds app module imports outwith angular.
+
+_Error handling_
