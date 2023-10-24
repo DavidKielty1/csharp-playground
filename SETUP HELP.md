@@ -93,3 +93,6 @@ Route AuthGuard. Private, session based auth.
   sharedModule - holds app module imports outwith angular.
 
 _Error handling_
+API Middleware
+Angular intercetors
+Troubleshooting exceptions
