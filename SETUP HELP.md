@@ -49,6 +49,9 @@ CORS: allow https:4200, link up with client serve.
 
 Dotnet EF -> add migrations [name], database update. Create first database push.
 
+_misc Quotes_
+HttpClient returns observables, in order to transform or modify a observable we use pipe method from RxJS.
+
 _Auth: Token(Services, Interface), Controllers, Middleware, Entity_
 Jwt Token Implementation
 Added PasswordSalt and PasswordHash to AppUser Entity
@@ -93,6 +96,13 @@ Route AuthGuard. Private, session based auth.
   sharedModule - holds app module imports outwith angular.
 
 _Error handling_
-API Middleware
-Angular intercetors
-Troubleshooting exceptions
+API: Added Controllers/BuggyController, Errors/APIException.cs, Middleware/ExceptionMiddleware, added ExceptionMiddleware to program.cs
+Client: \_interceptors/error.interceptor.ts
+. HttpErrorResponse observable piped with case/switch statements for all error codes. Error, error.error, error.error.errors.
+Errors/HTML templates: errors/not-found, errors/server-error, errors/test-error(for testing).
+. test-error.component.ts - logic for various errors (400, 401, 404, 500, 400 Validation error(register/login)).
+. 400 bad request toastr
+. 401 unauthorized toastr
+. 404 not-found - redirect 404 not found page.
+. 500 server-error - redirect to server-error page; error.details, error.message, guide to server errors.
+Troubleshooting - Network tab for errors.
