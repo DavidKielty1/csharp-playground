@@ -106,3 +106,16 @@ Errors/HTML templates: errors/not-found, errors/server-error, errors/test-error(
 . 404 not-found - redirect 404 not found page.
 . 500 server-error - redirect to server-error page; error.details, error.message, guide to server errors.
 Troubleshooting - Network tab for errors.
+
+_Extending the API_
+.Entity framework relationships / conventions
+Extending User Identity
+Adding DateTime extension to calculate age
+.Generating seed data
+.Repository pattern
+Creating a repository
+.Automapper - adding and usage
+.Automapper config
+.AutoMapper queryable extensions
+Updating users controller
+Adding DTO for members
