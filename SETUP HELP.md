@@ -11,6 +11,9 @@ Dotnet EF -For tool Database migrations and updates
 mkcert, /client/ssl -> mkcert 'localhost' - For Making perm and key for SSL, HTTPS
 System.IdentityModel.Tokens.Jwt - For Tokens - NuGet Package (Ctrl Shift P - Open NuGet Gallery)
 microsoft.aspnetcore.authentication (Nuget Gallery)
+bootstrap, bootswatch
+ngx-toastr
+Automapper
 
 mkcert -> angular.json. serve/options
 boostrap -> angular.json. styles
@@ -112,9 +115,11 @@ _Extending the API_
 Extending User Identity
 Adding DateTime extension to calculate age
 .Generating seed data
-.Repository pattern
+.Repository pattern -
+. Pros: minimizes duplicate query logic, decouples application for persistence framework (db), DB queries are centralized rather than scattered throughout app. Promotes testability, can easily mock the IRepository relative to DBContext.
+. Cons: Abstraction of an abstraction. Each root entity should have it's own entity => more code. Also need to implement Unit of Work pattern to control transactions.
 Creating a repository
-.Automapper - adding and usage
+.Automapper - adding and usage - tool to help map selected entity properties to EntityDto.
 .Automapper config
 .AutoMapper queryable extensions
 Updating users controller
