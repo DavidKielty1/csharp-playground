@@ -111,16 +111,22 @@ Errors/HTML templates: errors/not-found, errors/server-error, errors/test-error(
 Troubleshooting - Network tab for errors.
 
 _Extending the API_
-.Entity framework relationships / conventions
-Extending User Identity
-Adding DateTime extension to calculate age
-.Generating seed data
+Extending Entities, Entity framework relationships / conventions:
+AppUser => Added user property fields & List<Photo> = new();
+Photos => Id, Url, IsMain, PublicId, {AppUserId, AppUser Appuser ( creating relation in Entity) } [Table("Photos)].
+Entity(Appuser, Photos) -> Dto(Member, MemberPhotos); DTOs (Only Select fields you want (no password/hash)).
+Controller(User) -> IUserRepository(UserRepository).
+Added DateTime extension to calculate age. Do not have logic in entity, messes with mapping/AutoMapping to DTOs.
+
 .Repository pattern -
 . Pros: minimizes duplicate query logic, decouples application for persistence framework (db), DB queries are centralized rather than scattered throughout app. Promotes testability, can easily mock the IRepository relative to DBContext.
 . Cons: Abstraction of an abstraction. Each root entity should have it's own entity => more code. Also need to implement Unit of Work pattern to control transactions.
 Creating a repository
+. UserController injects UserRepository. UserRepository interacts with DB.
+
 .Automapper - adding and usage - tool to help map selected entity properties to EntityDto.
-.Automapper config
-.AutoMapper queryable extensions
-Updating users controller
-Adding DTO for members
+.Automapper config. Added to ApplicationServices(Extension).
+Repository -> ProjectTo<MemberDto>
+.AutoMapper queryable extensions. CreateMap<AppUser, MemberDto>().ForMember(dest => dest.PhotoUrl, opt => opt.MapFrom(src => src.Photos.FirstOrDefault(x => x.IsMain).Url))
+
+.Generating seed data - File.ReadAllTextAsync('Data/UserSeedData.json'). JsonSerializer.Deserialize. Middleware program.cs check if empty DB. Seed().
