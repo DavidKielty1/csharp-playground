@@ -4,21 +4,27 @@ Angular
 Node
 Angular CLI
 Dotnet CLI
+
 Microsoft.EntityFrameworkCore.Designer - For Database
 Microsoft.EntityFrameworkCore.Core - For Database
 Microsoft.EntityFrameworkCore.Sqlite - For Database
 Dotnet EF -For tool Database migrations and updates
 mkcert, /client/ssl -> mkcert 'localhost' - For Making perm and key for SSL, HTTPS
+. mkcert -> angular.json. serve/options
+
 System.IdentityModel.Tokens.Jwt - For Tokens - NuGet Package (Ctrl Shift P - Open NuGet Gallery)
 microsoft.aspnetcore.authentication (Nuget Gallery)
-bootstrap, bootswatch
-ngx-toastr
+
+boostrap (npm) + import
+. boostrap -> angular.json. styles
+. bootstrap, bootswatch
+. bootswatch theme -> angular.json. styles
+ngx-toastr (npm)
+.ngx-toastr -> angular.json. styles
+
 Automapper
 
-mkcert -> angular.json. serve/options
-boostrap -> angular.json. styles
-bootswatch theme -> angular.json. styles
-ngx-toastr -> angular.json. styles
+ng-gallery (npm)
 
 ## VSCode Extensions:
 
@@ -27,9 +33,14 @@ C# Dev-kit
 SQLite explorer
 Angular
 
+## Tidbits
+
+JsonGenerator
+Json to TypeScript
+
 ## Processes:
 
-_Priliminary_
+**Priliminary**
 API.csproj -> <ImplicitUsings>enable</ImplicitUsings>
 appsettings.development -> "Logging": {"LogLevel": {"Default": "Information","Microsoft.AspNetCore": "Information"}},
 "ConnectionStrings": {"DefaultConnection": "Data source=geekmeet.db" }
@@ -52,10 +63,10 @@ CORS: allow https:4200, link up with client serve.
 
 Dotnet EF -> add migrations [name], database update. Create first database push.
 
-_misc Quotes_
-HttpClient returns observables, in order to transform or modify a observable we use pipe method from RxJS.
+**misc Quotes**
+HttpClient returns observables, in order to transform or modify a observable we use pipe method from RxJS. We must subscribe to observables.
 
-_Auth: Token(Services, Interface), Controllers, Middleware, Entity_
+**Auth: Token(Services, Interface), Controllers, Middleware, Entity**
 Jwt Token Implementation
 Added PasswordSalt and PasswordHash to AppUser Entity
 Added folders: DTOs, Services(Token), Interfaces(IToken).
@@ -67,7 +78,7 @@ User: [Authorize] root, [AllowAnonymous] GetAll.
 Services: AddIdentityServices.
 Middleware: use app.UseAuthentication(); app.UseAuthorization();
 
-_Setting up Angular navbar/homepage components. Conditional rendering_
+**Setting up Angular navbar/homepage components. Conditional rendering**
 Angular CLI ng g c/s; generate component/service.
 Angular template forms.
 . {#registerForm="ngForm", ngSubmit="register()",
@@ -85,7 +96,7 @@ Structural directives: Parent/child component communication. Input output proper
 Post: {constructor(private http: HttpClient) {}, this.http.get('https://localhost:5001/api/users')
 .subscribe({next: (response) => (this.users = response), error, complete})}.
 
-_Angular Routing_
+**Angular Routing**
 Components, not pages.
 <a routerLink="/home" routerLinkActive="active">Link</a>
 Route AuthGuard. Private, session based auth.
@@ -98,7 +109,7 @@ Route AuthGuard. Private, session based auth.
   Toast - error messages within login, register methods.
   sharedModule - holds app module imports outwith angular.
 
-_Error handling_
+**Error handling**
 API: Added Controllers/BuggyController, Errors/APIException.cs, Middleware/ExceptionMiddleware, added ExceptionMiddleware to program.cs
 Client: \_interceptors/error.interceptor.ts
 . HttpErrorResponse observable piped with case/switch statements for all error codes. Error, error.error, error.error.errors.
@@ -110,7 +121,7 @@ Errors/HTML templates: errors/not-found, errors/server-error, errors/test-error(
 . 500 server-error - redirect to server-error page; error.details, error.message, guide to server errors.
 Troubleshooting - Network tab for errors.
 
-_Extending the API_
+**Extending the API**
 Extending Entities, Entity framework relationships / conventions:
 AppUser => Added user property fields & List<Photo> = new();
 Photos => Id, Url, IsMain, PublicId, {AppUserId, AppUser Appuser ( creating relation in Entity) } [Table("Photos)].
@@ -118,15 +129,47 @@ Entity(Appuser, Photos) -> Dto(Member, MemberPhotos); DTOs (Only Select fields y
 Controller(User) -> IUserRepository(UserRepository).
 Added DateTime extension to calculate age. Do not have logic in entity, messes with mapping/AutoMapping to DTOs.
 
-.Repository pattern -
+_Repository pattern_
 . Pros: minimizes duplicate query logic, decouples application for persistence framework (db), DB queries are centralized rather than scattered throughout app. Promotes testability, can easily mock the IRepository relative to DBContext.
 . Cons: Abstraction of an abstraction. Each root entity should have it's own entity => more code. Also need to implement Unit of Work pattern to control transactions.
 Creating a repository
 . UserController injects UserRepository. UserRepository interacts with DB.
 
-.Automapper - adding and usage - tool to help map selected entity properties to EntityDto.
+_Automapper_ - adding and usage -
+Tool used to help map selected entity properties to EntityDto.
 .Automapper config. Added to ApplicationServices(Extension).
 Repository -> ProjectTo<MemberDto>
 .AutoMapper queryable extensions. CreateMap<AppUser, MemberDto>().ForMember(dest => dest.PhotoUrl, opt => opt.MapFrom(src => src.Photos.FirstOrDefault(x => x.IsMain).Url))
 
 .Generating seed data - File.ReadAllTextAsync('Data/UserSeedData.json'). JsonSerializer.Deserialize. Middleware program.cs check if empty DB. Seed().
+
+**Building the UI**
+apiUrl .environment/environment.development import => account.service (environment.apiUrl)
+memberService fetches memberDTO info from API.
+
+_members-list.component.ts/html_
+Fetches members OnInit => subscribes to injected memberService. members = this.members (members array [] instantiated in component).
+*ngFor="let member of members". Square breacket [member]="member" used to pass property from component.ts file to another component (member-list => member-card).
+*member-card.component.ts/hmtl*
+@Input() member: Member | undefined. Used to accept property from higher component (member-list).
+Within button: routerLink="members/{{member.Username}}" Upon click -> route to memeber.Username (member-detail) (set up as memebers/username in app.router).
+*ngIf="member" => no need for mass member?. throughout html. {member && . . . }.
+_member-detail.component.ts/html_
+Inject MemberService in constructor to fetch member details from memberAPI.
+Inject ActivatedRoute to get username from route/url params: /member/:username.
+. { this.memberService.getMember(this.route.snapshot.paramMap.get('username')); }. (this gets the username param from member/:username routeURL).
+standalone: true. Must import member, tabset, gallery into the standalone component (imports array in component.ts).
+. imports: [CommonModule (*ngIf), TabsModule (tabset), GalleryModule].
+. new ImageItem within ngx-gallery { this.images.push(new ImageItem({ src: photos.url, thumb: photos.url })); }.
+. #photoTab="Tab" trick to get first image to load in tab.
+
+shared.module -> tabs ngx boostrap. Import. Must export TabsModule to use in html template.
+app.module: MemberDetailComponent NgModule -> StandAlone component.
+ng-gallery.
+
+Angular component lifecycle (e.g. member-detail):
+
+1. Component class is constructor (And injectables are injected).
+2. template is constructed (no member info is loaded yet).
+3. initialized (OnInit: loadMembers (members are loaded in)).
+4. member details are now injected into the {{member?.property}} items.
