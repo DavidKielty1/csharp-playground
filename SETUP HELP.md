@@ -40,7 +40,7 @@ Json to TypeScript
 
 ## Processes:
 
-**Priliminary**
+1-3. **Priliminary**
 API.csproj -> <ImplicitUsings>enable</ImplicitUsings>
 appsettings.development -> "Logging": {"LogLevel": {"Default": "Information","Microsoft.AspNetCore": "Information"}},
 "ConnectionStrings": {"DefaultConnection": "Data source=geekmeet.db" }
@@ -66,42 +66,42 @@ Dotnet EF -> add migrations [name], database update. Create first database push.
 **misc Quotes**
 HttpClient returns observables, in order to transform or modify a observable we use pipe method from RxJS. We must subscribe to observables.
 
-**Auth: Token(Services, Interface), Controllers, Middleware, Entity**
-Jwt Token Implementation
-Added PasswordSalt and PasswordHash to AppUser Entity
-Added folders: DTOs, Services(Token), Interfaces(IToken).
-DTOs: LoginDto, RegisterDto, UserDto.
-Added to controllers: Account and User.
-appsettings.Development: Added Token Secret (Only used in Dev).
-Account: Register and Login. JwtToken logic. Hashing, salts, secrets.
-User: [Authorize] root, [AllowAnonymous] GetAll.
-Services: AddIdentityServices.
-Middleware: use app.UseAuthentication(); app.UseAuthorization();
+4. **Auth: Token(Services, Interface), Controllers, Middleware, Entity**
+   Jwt Token Implementation
+   Added PasswordSalt and PasswordHash to AppUser Entity
+   Added folders: DTOs, Services(Token), Interfaces(IToken).
+   DTOs: LoginDto, RegisterDto, UserDto.
+   Added to controllers: Account and User.
+   appsettings.Development: Added Token Secret (Only used in Dev).
+   Account: Register and Login. JwtToken logic. Hashing, salts, secrets.
+   User: [Authorize] root, [AllowAnonymous] GetAll.
+   Services: AddIdentityServices.
+   Middleware: use app.UseAuthentication(); app.UseAuthorization();
 
-**Setting up Angular navbar/homepage components. Conditional rendering**
-Angular CLI ng g c/s; generate component/service.
-Angular template forms.
-. {#registerForm="ngForm", ngSubmit="register()",
-. [(ngModel)]="model.username"/"model.password",
-. (click)="register()"/"cancel()".}
-Angular Services: acount.service.ts.
-. Injection. Service - entire browsing lifecycle (singletons). Good place to store global state.
-. {private currentUserSource = new BehaviorSubject<User | null>(null); behaviourSubject currentUser$} can get/set.
+5. **Setting up Angular navbar/homepage components. Conditional rendering**
+   Angular CLI ng g c/s; generate component/service.
+   Angular template forms.
+   . {#registerForm="ngForm", ngSubmit="register()",
+   . [(ngModel)]="model.username"/"model.password",
+   . (click)="register()"/"cancel()".}
+   Angular Services: acount.service.ts.
+   . Injection. Service - entire browsing lifecycle (singletons). Good place to store global state.
+   . {private currentUserSource = new BehaviorSubject<User | null>(null); behaviourSubject currentUser$} can get/set.
 . Observable get - {currentUser$ = this.currentUserSource.asObservable();},
-. next: set - {this.currentUserSource.next(user)};
-Structural directives: Parent/child component communication. Input output properties.
-. Within html template: {\*ngIf="registerMode" <app-register(cancelRegister)="cancelRegisterMode($event)"></app-register>}
+   . next: set - {this.currentUserSource.next(user)};
+   Structural directives: Parent/child component communication. Input output properties.
+   . Within html template: {\*ngIf="registerMode" <app-register(cancelRegister)="cancelRegisterMode($event)"></app-register>}
 . {@Input() component: function () => {};  template: [propname]="prop name".
 . @Output() component: cancelRegister = new EventEmitter(); template: (cancelRegister)="cancelRegisterMode($event)".}
-Post: {constructor(private http: HttpClient) {}, this.http.get('https://localhost:5001/api/users')
-.subscribe({next: (response) => (this.users = response), error, complete})}.
+   Post: {constructor(private http: HttpClient) {}, this.http.get('https://localhost:5001/api/users')
+   .subscribe({next: (response) => (this.users = response), error, complete})}.
 
-**Angular Routing**
-Components, not pages.
-<a routerLink="/home" routerLinkActive="active">Link</a>
-Route AuthGuard. Private, session based auth.
-. app-routing.module: wrap one/all routes with {runGuardsAndResolvers: 'always', canActivate: [authGuard], children: [ {path}, {path}, {path}]}.
-. html-template: <ngcontainer \*ngIf="accountService.currentUser$ | async"><li>Link</li><li>Link</li></ngcontainer>.
+6. **Angular Routing**
+   Components, not pages.
+   <a routerLink="/home" routerLinkActive="active">Link</a>
+   Route AuthGuard. Private, session based auth.
+   . app-routing.module: wrap one/all routes with {runGuardsAndResolvers: 'always', canActivate: [authGuard], children: [ {path}, {path}, {path}]}.
+   . html-template: <ngcontainer \*ngIf="accountService.currentUser$ | async"><li>Link</li><li>Link</li></ngcontainer>.
 
 \*extras:
 
@@ -109,25 +109,25 @@ Route AuthGuard. Private, session based auth.
   Toast - error messages within login, register methods.
   sharedModule - holds app module imports outwith angular.
 
-**Error handling**
-API: Added Controllers/BuggyController, Errors/APIException.cs, Middleware/ExceptionMiddleware, added ExceptionMiddleware to program.cs
-Client: \_interceptors/error.interceptor.ts
-. HttpErrorResponse observable piped with case/switch statements for all error codes. Error, error.error, error.error.errors.
-Errors/HTML templates: errors/not-found, errors/server-error, errors/test-error(for testing).
-. test-error.component.ts - logic for various errors (400, 401, 404, 500, 400 Validation error(register/login)).
-. 400 bad request toastr
-. 401 unauthorized toastr
-. 404 not-found - redirect 404 not found page.
-. 500 server-error - redirect to server-error page; error.details, error.message, guide to server errors.
-Troubleshooting - Network tab for errors.
+7. **Error handling**
+   API: Added Controllers/BuggyController, Errors/APIException.cs, Middleware/ExceptionMiddleware, added ExceptionMiddleware to program.cs
+   Client: \_interceptors/error.interceptor.ts
+   . HttpErrorResponse observable piped with case/switch statements for all error codes. Error, error.error, error.error.errors.
+   Errors/HTML templates: errors/not-found, errors/server-error, errors/test-error(for testing).
+   . test-error.component.ts - logic for various errors (400, 401, 404, 500, 400 Validation error(register/login)).
+   . 400 bad request toastr
+   . 401 unauthorized toastr
+   . 404 not-found - redirect 404 not found page.
+   . 500 server-error - redirect to server-error page; error.details, error.message, guide to server errors.
+   Troubleshooting - Network tab for errors.
 
-**Extending the API**
-Extending Entities, Entity framework relationships / conventions:
-AppUser => Added user property fields & List<Photo> = new();
-Photos => Id, Url, IsMain, PublicId, {AppUserId, AppUser Appuser ( creating relation in Entity) } [Table("Photos)].
-Entity(Appuser, Photos) -> Dto(Member, MemberPhotos); DTOs (Only Select fields you want (no password/hash)).
-Controller(User) -> IUserRepository(UserRepository).
-Added DateTime extension to calculate age. Do not have logic in entity, messes with mapping/AutoMapping to DTOs.
+8. **Extending the API**
+   Extending Entities, Entity framework relationships / conventions:
+   AppUser => Added user property fields & List<Photo> = new();
+   Photos => Id, Url, IsMain, PublicId, {AppUserId, AppUser Appuser ( creating relation in Entity) } [Table("Photos)].
+   Entity(Appuser, Photos) -> Dto(Member, MemberPhotos); DTOs (Only Select fields you want (no password/hash)).
+   Controller(User) -> IUserRepository(UserRepository).
+   Added DateTime extension to calculate age. Do not have logic in entity, messes with mapping/AutoMapping to DTOs.
 
 _Repository pattern_
 . Pros: minimizes duplicate query logic, decouples application for persistence framework (db), DB queries are centralized rather than scattered throughout app. Promotes testability, can easily mock the IRepository relative to DBContext.
@@ -143,9 +143,10 @@ Repository -> ProjectTo<MemberDto>
 
 .Generating seed data - File.ReadAllTextAsync('Data/UserSeedData.json'). JsonSerializer.Deserialize. Middleware program.cs check if empty DB. Seed().
 
-**Building the UI**
-apiUrl .environment/environment.development import => account.service (environment.apiUrl)
-memberService fetches memberDTO info from API.
+9. **Building the UI**
+   apiUrl .environment/environment.development import => account.service (environment.apiUrl)
+   memberService fetches memberDTO info from API.
+   interceptor sends JWT tokens.
 
 _members-list.component.ts/html_
 Fetches members OnInit => subscribes to injected memberService. members = this.members (members array [] instantiated in component).
@@ -172,4 +173,22 @@ Angular component lifecycle (e.g. member-detail):
 1. Component class is constructor (And injectables are injected).
 2. template is constructed (no member info is loaded yet).
 3. initialized (OnInit: loadMembers (members are loaded in)).
-4. member details are now injected into the {{member?.property}} items.
+4. member details are now injected into the {{member?.property}} items./
+
+**10 Updating Resources**
+Implement persistence when updating resources in API.
+
+1. Angular Template Forums (Extend past forum implementation).
+2. CanDeactive Route Guard - if someone presses back, give prompt (are you sure you want to leave you will lose data).
+3. The @ViewChild decorator (access elements from templates in components).
+   Html template is a child of component.ts Viewchild is used to access editForm within component (to reset form).
+4. Persisting changes to API (update user).
+5. Adding loading indicators.
+6. Caching data in Angular services.
+
+memeber-edit.html = banana in box syntax for two-way binding [(ngModel)]="member".
+
+Angular form = #editForm="ngForm". #[name] = ngForm. ngSubmit on form component.
+
+Files Changed:
+_member-edit.ms/html_
