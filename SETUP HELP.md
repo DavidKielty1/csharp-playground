@@ -21,6 +21,10 @@ boostrap (npm) + import
 . bootswatch theme -> angular.json. styles
 ngx-toastr (npm)
 .ngx-toastr -> angular.json. styles
+ngx-spinner
+. Import/export from shared module. angular.json + specific spinner type
+. added to app.html above navBar to be useable throughout app.
+<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#32fbe2" type = "ball-climbing-dot" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
 
 Automapper
 
@@ -65,6 +69,7 @@ Dotnet EF -> add migrations [name], database update. Create first database push.
 
 **misc Quotes**
 HttpClient returns observables, in order to transform or modify a observable we use pipe method from RxJS. We must subscribe to observables.
+Javascript: NotFound(), NoContent() Reponse for a PutRequest 204.
 
 4. **Auth: Token(Services, Interface), Controllers, Middleware, Entity**
    Jwt Token Implementation
@@ -190,5 +195,17 @@ memeber-edit.html = banana in box syntax for two-way binding [(ngModel)]="member
 
 Angular form = #editForm="ngForm". #[name] = ngForm. ngSubmit on form component.
 
+CanDeactivate(component, currentRoute, currentState, nextState) GuardRoute. Guards against clicking to go to another component within same app.
+@HostListener -> prompts if user navigates via browser (e.g. if they navigate via typing in URL).
+. { @HostListener('window:beforeunload', ['$event']) unloadNotification }
+
+Use AutoMapper to map between AppUser and MemberUpdateTo.
+
+busyService has logic for turning on spinner and setting busy to > 0 (++) ; and turning off spinner, setting spinner to 0 (--).
+\_interceptor will tell busyService if a http request has been made, thus kicking off ++.
+
 Files Changed:
 _member-edit.ms/html_
+_busyService_
+_memberService_
+_loadingInterceptor_ Add to AppModule

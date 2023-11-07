@@ -5,6 +5,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [],
@@ -16,7 +17,10 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
     }),
+    NgxSpinnerModule.forRoot({
+      type: 'ball-climbing-dot',
+    }),
   ],
-  exports: [BsDropdownModule, ToastrModule, TabsModule],
+  exports: [BsDropdownModule, ToastrModule, TabsModule, NgxSpinnerModule],
 })
 export class SharedModule {}
