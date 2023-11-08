@@ -183,29 +183,30 @@ Angular component lifecycle (e.g. member-detail):
 **10 Updating Resources**
 Implement persistence when updating resources in API.
 
-1. Angular Template Forums (Extend past forum implementation).
+1. Angular Template Forums: Angular form = { #editForm="ngForm". #[name] = ngForm. ngSubmit on form component. }
+   . @ViewChild('editForm') editForm: NgForm | undefined;
+   . member-edit.html = banana in box syntax for two-way binding [(ngModel)]="member".
 2. CanDeactive Route Guard - if someone presses back, give prompt (are you sure you want to leave you will lose data).
+   CanDeactivate(component, currentRoute, currentState, nextState) GuardRoute. Guards against clicking to go to another component within same app.
+   @HostListener -> prompts if user navigates via browser (e.g. if they navigate via typing in URL).
+   . { @HostListener('window:beforeunload', ['$event']) unloadNotification }
 3. The @ViewChild decorator (access elements from templates in components).
    Html template is a child of component.ts Viewchild is used to access editForm within component (to reset form).
-4. Persisting changes to API (update user).
-5. Adding loading indicators.
+4. Persisting changes to API (update user). member-edit.ts/html.
+   .pipe(map(() => { const index = this.members.indexOf(member);
+   this.members[index] = { ...this.members[index], ...member }; }). Updating member info with spread operator. Latest state > prev.
+   Use AutoMapper to map between MemberUpdateTo to AppUser (put updates).
+5. Adding loading indicators. loadingInteptor, busyService, appModule provider, appComponent (top level).
+   Interceptor implements HttpInterceptor. Shoots on any http request. As we have moved from API http request to stored data, no http request is taking place, thus we do not see the loading spinner anymore.
+   \_interceptors/LoadingInterceptor
+   \_busyService has logic for turning on spinner and setting busy to > 0 (++) ; and turning off spinner, setting spinner to 0 (--).
+   \_interceptor will tell busyService if a http request has been made, thus kicking off ++.
+   loadingInterceptor added to appModole providers array.
 6. Caching data in Angular services.
+   Storing members Get request info in membersService to persist data. rxjs .piping to persist data. e.g. Member-list component:
+   Piping get and put requests within memberService => attaching to const 'member'.
+   Within component.ts file, member$ = Observable<Member[]> | undefined;
+   { ngOnInit(): void {this.members$ = this.memberService.getMembers();} }.
+   html: { \*ngFor="let member of members$ | async" }
 
-memeber-edit.html = banana in box syntax for two-way binding [(ngModel)]="member".
-
-Angular form = #editForm="ngForm". #[name] = ngForm. ngSubmit on form component.
-
-CanDeactivate(component, currentRoute, currentState, nextState) GuardRoute. Guards against clicking to go to another component within same app.
-@HostListener -> prompts if user navigates via browser (e.g. if they navigate via typing in URL).
-. { @HostListener('window:beforeunload', ['$event']) unloadNotification }
-
-Use AutoMapper to map between AppUser and MemberUpdateTo.
-
-busyService has logic for turning on spinner and setting busy to > 0 (++) ; and turning off spinner, setting spinner to 0 (--).
-\_interceptor will tell busyService if a http request has been made, thus kicking off ++.
-
-Files Changed:
-_member-edit.ms/html_
-_busyService_
-_memberService_
-_loadingInterceptor_ Add to AppModule
+**11 Adding photo upload functionality**
