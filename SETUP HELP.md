@@ -1,3 +1,9 @@
+## use:
+
+Navigate to folders; Client/API.
+Client: See README.md within client.
+API: dotnet run.
+
 ## install:
 
 Angular
