@@ -44,7 +44,8 @@ Json to TypeScript
 
 ## Processes:
 
-1-3. **Priliminary**
+/
+1-3. **Preliminary**
 API.csproj -> <ImplicitUsings>enable</ImplicitUsings>
 appsettings.development -> "Logging": {"LogLevel": {"Default": "Information","Microsoft.AspNetCore": "Information"}},
 "ConnectionStrings": {"DefaultConnection": "Data source=geekmeet.db" }
@@ -66,53 +67,51 @@ database(SQLite) -> program.cs + appsettings.Development.json: Connecting: Defau
 CORS: allow https:4200, link up with client serve.
 
 Dotnet EF -> add migrations [name], database update. Create first database push.
-
+/
 **misc Quotes**
 HttpClient returns observables, in order to transform or modify a observable we use pipe method from RxJS. We must subscribe to observables.
 Javascript: NotFound(), NoContent() Reponse for a PutRequest 204.
-
-4. **Auth: Token(Services, Interface), Controllers, Middleware, Entity**
-   Jwt Token Implementation
-   Added PasswordSalt and PasswordHash to AppUser Entity
-   Added folders: DTOs, Services(Token), Interfaces(IToken).
-   DTOs: LoginDto, RegisterDto, UserDto.
-   Added to controllers: Account and User.
-   appsettings.Development: Added Token Secret (Only used in Dev).
-   Account: Register and Login. JwtToken logic. Hashing, salts, secrets.
-   User: [Authorize] root, [AllowAnonymous] GetAll.
-   Services: AddIdentityServices.
-   Middleware: use app.UseAuthentication(); app.UseAuthorization();
-
-5. **Setting up Angular navbar/homepage components. Conditional rendering**
-   Angular CLI ng g c/s; generate component/service.
-   Angular template forms.
-   . {#registerForm="ngForm", ngSubmit="register()",
-   . [(ngModel)]="model.username"/"model.password",
-   . (click)="register()"/"cancel()".}
-   Angular Services: acount.service.ts.
-   . Injection. Service - entire browsing lifecycle (singletons). Good place to store global state.
-   . {private currentUserSource = new BehaviorSubject<User | null>(null); behaviourSubject currentUser$} can get/set.
+/ 4. **Auth: Token(Services, Interface), Controllers, Middleware, Entity**
+Jwt Token Implementation
+Added PasswordSalt and PasswordHash to AppUser Entity
+Added folders: DTOs, Services(Token), Interfaces(IToken).
+DTOs: LoginDto, RegisterDto, UserDto.
+Added to controllers: Account and User.
+appsettings.Development: Added Token Secret (Only used in Dev).
+Account: Register and Login. JwtToken logic. Hashing, salts, secrets.
+User: [Authorize] root, [AllowAnonymous] GetAll.
+Services: AddIdentityServices.
+Middleware: use app.UseAuthentication(); app.UseAuthorization();
+/ 5. **Setting up Angular navbar/homepage components. Conditional rendering**
+Angular CLI ng g c/s; generate component/service.
+Angular template forms.
+. {#registerForm="ngForm", ngSubmit="register()",
+. [(ngModel)]="model.username"/"model.password",
+. (click)="register()"/"cancel()".}
+Angular Services: acount.service.ts.
+. Injection. Service - entire browsing lifecycle (singletons). Good place to store global state.
+. {private currentUserSource = new BehaviorSubject<User | null>(null); behaviourSubject currentUser$} can get/set.
 . Observable get - {currentUser$ = this.currentUserSource.asObservable();},
-   . next: set - {this.currentUserSource.next(user)};
-   Structural directives: Parent/child component communication. Input output properties.
-   . Within html template: {\*ngIf="registerMode" <app-register(cancelRegister)="cancelRegisterMode($event)"></app-register>}
+. next: set - {this.currentUserSource.next(user)};
+Structural directives: Parent/child component communication. Input output properties.
+. Within html template: {\*ngIf="registerMode" <app-register(cancelRegister)="cancelRegisterMode($event)"></app-register>}
 . {@Input() component: function () => {};  template: [propname]="prop name".
 . @Output() component: cancelRegister = new EventEmitter(); template: (cancelRegister)="cancelRegisterMode($event)".}
-   Post: {constructor(private http: HttpClient) {}, this.http.get('https://localhost:5001/api/users')
-   .subscribe({next: (response) => (this.users = response), error, complete})}.
-
-6. **Angular Routing**
-   Components, not pages.
-   <a routerLink="/home" routerLinkActive="active">Link</a>
-   Route AuthGuard. Private, session based auth.
-   . app-routing.module: wrap one/all routes with {runGuardsAndResolvers: 'always', canActivate: [authGuard], children: [ {path}, {path}, {path}]}.
-   . html-template: <ngcontainer \*ngIf="accountService.currentUser$ | async"><li>Link</li><li>Link</li></ngcontainer>.
+Post: {constructor(private http: HttpClient) {}, this.http.get('https://localhost:5001/api/users')
+.subscribe({next: (response) => (this.users = response), error, complete})}.
+/ 6. **Angular Routing**
+Components, not pages.
+{ <a* routerLink="/home" routerLinkActive="active">Link</a*> }
+Route AuthGuard. Private, session based auth.
+. app-routing.module: wrap one/all routes with {runGuardsAndResolvers: 'always', canActivate: [authGuard], children: [ {path}, {path}, {path}]}.
+. html-template: {<ngcontainer* \*ngIf="accountService.currentUser$ | async"><li*>Link</li*><li*>Link</li*></ngcontainer*>.}
 
 \*extras:
 
 - Bootstrap theme, bootswatch
   Toast - error messages within login, register methods.
   sharedModule - holds app module imports outwith angular.
+  /
 
 7. **Error handling**
    API: Added Controllers/BuggyController, Errors/APIException.cs, Middleware/ExceptionMiddleware, added ExceptionMiddleware to program.cs
@@ -125,7 +124,7 @@ Javascript: NotFound(), NoContent() Reponse for a PutRequest 204.
    . 404 not-found - redirect 404 not found page.
    . 500 server-error - redirect to server-error page; error.details, error.message, guide to server errors.
    Troubleshooting - Network tab for errors.
-
+   /
 8. **Extending the API**
    Extending Entities, Entity framework relationships / conventions:
    AppUser => Added user property fields & List<Photo> = new();
@@ -147,19 +146,20 @@ Repository -> ProjectTo<MemberDto>
 .AutoMapper queryable extensions. CreateMap<AppUser, MemberDto>().ForMember(dest => dest.PhotoUrl, opt => opt.MapFrom(src => src.Photos.FirstOrDefault(x => x.IsMain).Url))
 
 .Generating seed data - File.ReadAllTextAsync('Data/UserSeedData.json'). JsonSerializer.Deserialize. Middleware program.cs check if empty DB. Seed().
-
-9. **Building the UI**
-   apiUrl .environment/environment.development import => account.service (environment.apiUrl)
-   memberService fetches memberDTO info from API.
-   interceptor sends JWT tokens.
+/ 9. **Building the UI**
+apiUrl .environment/environment.development import => account.service (environment.apiUrl)
+memberService fetches memberDTO info from API.
+interceptor sends JWT tokens.
 
 _members-list.component.ts/html_
 Fetches members OnInit => subscribes to injected memberService. members = this.members (members array [] instantiated in component).
 *ngFor="let member of members". Square breacket [member]="member" used to pass property from component.ts file to another component (member-list => member-card).
+/
 *member-card.component.ts/hmtl*
 @Input() member: Member | undefined. Used to accept property from higher component (member-list).
 Within button: routerLink="members/{{member.Username}}" Upon click -> route to memeber.Username (member-detail) (set up as memebers/username in app.router).
 *ngIf="member" => no need for mass member?. throughout html. {member && . . . }.
+/
 _member-detail.component.ts/html_
 Inject MemberService in constructor to fetch member details from memberAPI.
 Inject ActivatedRoute to get username from route/url params: /member/:username.
