@@ -60,7 +60,7 @@ Properties/launchSettings -> "launchBrowser": false, "applicationUrl": "http://l
 
 Program.cs ->'Dependency injection'
 builder.Services.AddControllers();
-builder.Services.AddDbContext<DataContext>(opt =>{opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));});
+builder.Services.AddDbContext<DataContext>(opt =>{opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));}); ((Moved to extensions folder)).
 builder.Services.AddCors();
 << Services can be added to an extensions folder to keep program.cs tidy>>
 
