@@ -3,6 +3,8 @@
 Navigate to folders; Client/API.
 Client: See README.md within client.
 API: dotnet run.
+Client: ng serve
+Login+Token: Blanca - Pa$$w0rd, or see Data/seed information in API folder.
 
 ## install:
 
