@@ -19,9 +19,9 @@ namespace API.Helpers
         }
     }
 
-    public class MainPhotoUrlResolver : IValueResolver<AppUser, MemberDto, string>
+    public class MainPhotoUrlResolver : IValueResolver<AppUser, MemberDto, string?>
     {
-        public string Resolve(AppUser source, MemberDto destination, string destMember, ResolutionContext context)
+        public string? Resolve(AppUser source, MemberDto destination, string? destMember, ResolutionContext context)
         {
             var mainPhoto = source.Photos.FirstOrDefault(x => x.IsMain);
             return mainPhoto?.Url ?? "default-url";

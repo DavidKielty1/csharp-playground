@@ -22,9 +22,21 @@ public class AccountController : BaseApiController
     [HttpPost("register")] // POST: api/accounts/register
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
+        if (string.IsNullOrEmpty(registerDto.Username))
+        {
+            return BadRequest("Username cannot be null or empty.");
+        }
+
+        if (string.IsNullOrEmpty(registerDto.Password))
+        {
+            return BadRequest("Password cannot be null or empty.");
+        }
+
         using var hmac = new HMACSHA512();
 
         var user = new AppUser 
+        
+        
         {
             Gender = "female",
             UserName = registerDto.Username.ToLower(),
@@ -57,6 +69,11 @@ public class AccountController : BaseApiController
         }
 
         using var hmac = new HMACSHA512(user.PasswordSalt);
+
+        if (string.IsNullOrEmpty(loginDto.Password))
+        {
+            return Unauthorized("Password cannot be null or empty.");
+        }
 
         var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
 

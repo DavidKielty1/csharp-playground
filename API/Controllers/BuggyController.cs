@@ -36,7 +36,12 @@ namespace API.Controllers
         {
             var thing = _context.Users.Find(-1);
 
-            var thingToReturn = thing.ToString();
+            var thingToReturn = thing?.ToString();
+
+            if (string.IsNullOrEmpty(thingToReturn))
+            {
+                return BadRequest("Username cannot be null or empty.");
+            }
 
             return thingToReturn;
         }

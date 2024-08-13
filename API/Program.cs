@@ -1,6 +1,7 @@
 using API.Data;
 using API.Extensions;
 using API.Middleware;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 
@@ -38,6 +39,10 @@ try
 catch (Exception ex)
 {
     var logger = services.GetService<ILogger<Program>>();
+    if (logger == null)
+    {
+        throw new InvalidOperationException("Logger is not available.");
+    }
     logger.LogError(ex, "An error occured during migration");
 }
 
