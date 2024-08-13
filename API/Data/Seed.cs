@@ -18,6 +18,8 @@ namespace API.Data
 
             var users = JsonSerializer.Deserialize<List<AppUser>>(userData, options);
 
+            if (users == null || users.Count == 0) return;
+
             foreach (var user in users)
             {
                 using var hmac = new HMACSHA512();

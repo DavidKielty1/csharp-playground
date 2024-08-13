@@ -26,6 +26,7 @@ public class AccountController : BaseApiController
 
         var user = new AppUser 
         {
+            Gender = "female",
             UserName = registerDto.Username.ToLower(),
             PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
             PasswordSalt = hmac.Key
@@ -50,15 +51,24 @@ public class AccountController : BaseApiController
 
         if (user == null) return Unauthorized("Invalid Username");
 
+        if (user.PasswordSalt == null)
+        {
+            return Unauthorized("Invalid user data. Password salt is missing.");
+        }
+
         using var hmac = new HMACSHA512(user.PasswordSalt);
 
         var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
+
+        if (user.PasswordHash == null)
+        {
+            return Unauthorized("Invalid user data. Password hash is missing.");
+        }
 
         for(int i = 0; i < computedHash.Length; i++)
         {
             if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid Password");
         }
-
         
         return new UserDto
         {

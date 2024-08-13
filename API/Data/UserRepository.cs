@@ -20,10 +20,17 @@ namespace API.Data
 
         public async Task<MemberDto> GetMemberAsync(string username)
         {
-            return await _context.Users
-            .Where(x => x.UserName == username)
-            .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
-            .SingleOrDefaultAsync();
+            var member = await _context.Users
+                .Where(x => x.UserName == username)
+                .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync();
+
+            if (member == null)
+            {
+                throw new InvalidOperationException("Member not found.");
+            }
+
+            return member;
         }
 
         public async Task<IEnumerable<MemberDto>> GetMembersAsync()
@@ -35,14 +42,23 @@ namespace API.Data
 
         public async Task<AppUser> GetUserByIdAsync(int id)
         {
-            return await _context.Users.FindAsync(id);
-        }
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                throw new InvalidOperationException("User not found.");
+            }
+            return user;        }
 
         public async Task<AppUser> GetUserByUsernameAsync(string username)
         {
-            return await _context.Users
-            .Include(p => p.Photos)
-            .SingleOrDefaultAsync(x => x.UserName == username);
+            var user = await _context.Users
+                .Include(p => p.Photos)
+                .SingleOrDefaultAsync(x => x.UserName == username);
+            if (user == null)
+            {
+                throw new InvalidOperationException("User not found.");
+            }
+            return user;
         }
 
         public async Task<IEnumerable<AppUser>> GetUsersAsync()
