@@ -23,8 +23,7 @@ namespace API.Helpers
     {
         public string? Resolve(AppUser source, MemberDto destination, string? destMember, ResolutionContext context)
         {
-            var mainPhoto = source.Photos.FirstOrDefault(x => x.IsMain);
-            return mainPhoto?.Url ?? "default-url";
+            return source.Photos.FirstOrDefault(x => x.IsMain)?.Url;
         }
     }
 }
