@@ -10,11 +10,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { provideToastr } from 'ngx-toastr';
 import { jwtInterceptor } from './_interceptors/jwt.interceptor';
-import { SharedModule } from './_modules/shared.module';
 import { routes } from './app.routes';
 import { errorInterceptor } from './_interceptors/error.interceptor';
 import { loadingInterceptor } from './_interceptors/loading.interceptor';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,8 +26,8 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       BrowserModule,
       FormsModule,
-      SharedModule,
-      NgxSpinnerModule
+      NgxSpinnerModule,
+      BrowserAnimationsModule
     ),
     provideHttpClient(
       withInterceptors([errorInterceptor, jwtInterceptor, loadingInterceptor]),
