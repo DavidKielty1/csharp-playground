@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { FileUploader, FileUploadModule } from 'ng2-file-upload';
 import { take } from 'rxjs';
 import { Member } from 'src/app/_models/member';
@@ -10,36 +10,21 @@ import { environment } from 'src/environments/environment.development';
 import { NgIf, NgFor, NgClass, NgStyle, DecimalPipe } from '@angular/common';
 
 @Component({
-    selector: 'app-photo-editor',
-    templateUrl: './photo-editor.component.html',
-    styleUrls: ['./photo-editor.component.css'],
-    standalone: true,
-    imports: [
-        NgIf,
-        NgFor,
-        NgClass,
-        FileUploadModule,
-        NgStyle,
-        DecimalPipe,
-    ],
+  selector: 'app-photo-editor',
+  templateUrl: './photo-editor.component.html',
+  styleUrls: ['./photo-editor.component.css'],
+  standalone: true,
+  imports: [NgIf, NgFor, NgClass, FileUploadModule, NgStyle, DecimalPipe],
 })
 export class PhotoEditorComponent implements OnInit {
+  private accountService = inject(AccountService);
   @Input() member: Member | undefined;
   uploader: FileUploader | undefined;
   hasBaseDropZoneOver = false;
   baseUrl = environment.apiUrl;
-  user: User | undefined;
+  user = this.accountService.currentUser();
 
-  constructor(
-    private accountService: AccountService,
-    private memberService: MembersService
-  ) {
-    this.accountService.currentUser$.pipe(take(1)).subscribe({
-      next: (user) => {
-        if (user) this.user = user;
-      },
-    });
-  }
+  constructor(private memberService: MembersService) {}
 
   ngOnInit(): void {
     this.initializeUploader();

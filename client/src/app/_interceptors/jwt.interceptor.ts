@@ -6,17 +6,13 @@ import { AccountService } from '../_services/account.service';
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const accountService = inject(AccountService);
 
-  accountService.currentUser$.pipe(take(1)).subscribe({
-    next: (user) => {
-      if (user) {
-        req = req.clone({
-          setHeaders: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
-      }
-    },
-  });
+  if (accountService.currentUser()) {
+    req = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${accountService.currentUser()?.token}`,
+      },
+    });
+  }
 
   return next(req).pipe();
 };

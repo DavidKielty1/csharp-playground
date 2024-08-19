@@ -11,7 +11,9 @@ export class MembersService {
   baseUrl = environment.apiUrl;
   members: Member[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient // if (this.user) this.userParams = new UserParams(this.user)
+  ) {}
 
   getMembers() {
     if (this.members.length > 0) return of(this.members);
@@ -43,6 +45,6 @@ export class MembersService {
   }
 
   deletePhotos(photoId: number) {
-    return this.http.delete(this.baseUrl + 'users/delete-photo/' + photoId)
+    return this.http.delete(this.baseUrl + 'users/delete-photo/' + photoId);
   }
 }
