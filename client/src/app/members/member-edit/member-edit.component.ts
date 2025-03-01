@@ -60,4 +60,8 @@ export class MemberEditComponent implements OnInit {
       },
     });
   }
+
+  onMemberChange(updatedMember: Member) {
+    this.member = updatedMember;
+  }
 }

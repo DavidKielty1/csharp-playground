@@ -1,9 +1,14 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  Input,
+  OnInit,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { FileUploader, FileUploadModule } from 'ng2-file-upload';
-import { take } from 'rxjs';
 import { Member } from 'src/app/_models/member';
 import { Photo } from 'src/app/_models/photo';
-import { User } from 'src/app/_models/user';
 import { AccountService } from 'src/app/_services/account.service';
 import { MembersService } from 'src/app/_services/members.service';
 import { environment } from 'src/environments/environment.development';
@@ -19,6 +24,7 @@ import { NgIf, NgFor, NgClass, NgStyle, DecimalPipe } from '@angular/common';
 export class PhotoEditorComponent implements OnInit {
   private accountService = inject(AccountService);
   @Input() member: Member | undefined;
+  @Output() memberChange = new EventEmitter<Member>();
   uploader: FileUploader | undefined;
   hasBaseDropZoneOver = false;
   baseUrl = environment.apiUrl;
@@ -34,30 +40,35 @@ export class PhotoEditorComponent implements OnInit {
     this.hasBaseDropZoneOver = e;
   }
 
-  setMainPhoto(photo: Photo) {
-    this.memberService.setMainPhoto(photo.id).subscribe({
-      next: () => {
-        if (this.user && this.member) {
-          this.user.photoUrl = photo.url;
-          this.accountService.setCurrentUser(this.user);
-          this.member.photoUrl = photo.url;
-          this.member.photos.forEach((p) => {
-            if (p.isMain) p.isMain = false;
-            if (p.id === photo.id) p.isMain = true;
-          });
-        }
+  deletePhoto(photo: Photo) {
+    this.memberService.deletePhotos(photo.id).subscribe({
+      next: (_) => {
+        const updatedMember: Member = { ...this.member! };
+        updatedMember.photos =
+          updatedMember.photos?.filter((x) => x.id !== photo.id) ?? [];
+        this.memberChange.emit(updatedMember);
       },
     });
   }
 
-  deletePhoto(photoId: number) {
-    this.memberService.deletePhotos(photoId).subscribe({
-      next: (_) => {
-        if (this.member) {
-          this.member.photos = this.member.photos.filter(
-            (x) => x.id !== photoId
-          );
+  setMainPhoto(photo: Photo) {
+    this.memberService.setMainPhoto(photo.id).subscribe({
+      next: () => {
+        const user = this.accountService.currentUser();
+        if (user) {
+          user.photoUrl = photo.url;
+          this.accountService.setCurrentUser(user);
         }
+        const updatedMember: Member = {
+          ...this.member!,
+          photos: this.member?.photos ?? [],
+        };
+        updatedMember.photoUrl = photo.url;
+        updatedMember.photos.forEach((p) => {
+          if (p.isMain) p.isMain = false;
+          if (p.id === photo.id) p.isMain = true;
+        });
+        this.memberChange.emit(updatedMember);
       },
     });
   }
@@ -78,10 +89,23 @@ export class PhotoEditorComponent implements OnInit {
     };
 
     this.uploader.onSuccessItem = (item, response, status, headers) => {
-      if (response) {
-        const photo = JSON.parse(response);
-        this.member?.photos.push(photo);
+      const photo = JSON.parse(response);
+      const updatedMember: Member = { ...this.member! };
+      updatedMember.photos.push(photo);
+      this.memberChange.emit(updatedMember);
+      if (photo.isMain) {
+        const user = this.accountService.currentUser();
+        if (user) {
+          user.photoUrl = photo.url;
+          this.accountService.setCurrentUser(user);
+        }
       }
+      updatedMember.photoUrl = photo.url;
+      updatedMember.photos.forEach((p) => {
+        if (p.isMain) p.isMain = false;
+        if (p.id === photo.id) p.isMain = true;
+      });
+      this.memberChange.emit(updatedMember);
     };
   }
 }

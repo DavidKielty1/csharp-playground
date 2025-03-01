@@ -1,0 +1,1 @@
+DELETE FROM Users WHERE Id IN (17, 18, 19, 20, 21, 22);

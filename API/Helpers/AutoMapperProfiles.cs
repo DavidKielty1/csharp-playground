@@ -2,6 +2,7 @@ using API.DTOs;
 using API.Entities;
 using API.Extensions;
 using AutoMapper;
+using System.Linq;
 
 namespace API.Helpers
 {
@@ -16,6 +17,8 @@ namespace API.Helpers
                     opt => opt.MapFrom(src => src.DateOfBirth.CalculateAge()));
             CreateMap<Photo, PhotoDto>();
             CreateMap<MemberUpdateDto, AppUser>();
+            CreateMap<RegisterDto, AppUser>();
+            CreateMap<string, DateOnly>().ConvertUsing(s => DateOnly.Parse(s));
         }
     }
 
@@ -23,7 +26,13 @@ namespace API.Helpers
     {
         public string? Resolve(AppUser source, MemberDto destination, string? destMember, ResolutionContext context)
         {
-            return source.Photos.FirstOrDefault(x => x.IsMain)?.Url;
+            if (source.Photos == null || !source.Photos.Any())
+            {
+                return "https://dummyimage.com/200x200/0000FF/808080&text=No+Profile+Picture";
+            }
+            
+            var mainPhoto = source.Photos.FirstOrDefault(x => x.IsMain);
+            return mainPhoto?.Url ?? "https://dummyimage.com/200x200/0000FF/808080&text=No+Profile+Picture";
         }
     }
 }

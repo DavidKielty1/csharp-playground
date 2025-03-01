@@ -13,6 +13,8 @@ Node
 Angular CLI
 Dotnet CLI
 
+Ctrl Shift P -> SQLite -> Open database (Geekmeet).
+
 Microsoft.EntityFrameworkCore.Designer - For Database
 Microsoft.EntityFrameworkCore.Core - For Database
 Microsoft.EntityFrameworkCore.Sqlite - For Database

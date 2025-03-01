@@ -119,17 +119,16 @@ namespace API.Data
 
         public async Task<MemberDto> GetMemberAsync(string username)
         {
-            var member = await _context.Users
-                .Where(x => x.UserName == username)
-                .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
-                .SingleOrDefaultAsync();
+            var user = await _context.Users
+                .Include(p => p.Photos)
+                .SingleOrDefaultAsync(x => x.UserName == username);
 
-            if (member == null)
+            if (user == null)
             {
-                throw new InvalidOperationException("Member not found.");
+                throw new InvalidOperationException("User not found.");
             }
 
-            return member;
+            return _mapper.Map<MemberDto>(user);
         }
 
         // public async Task<IEnumerable<MemberDto>> GetMembersAsync()
