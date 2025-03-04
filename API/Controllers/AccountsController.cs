@@ -16,7 +16,7 @@ public class AccountController(DataContext context, ITokenService tokenService, 
     [HttpPost("register")] // POST: api/accounts/register
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
-        Console.WriteLine($"Received RegisterDto: {System.Text.Json.JsonSerializer.Serialize(registerDto)}");
+        if (await UserExists(registerDto.Username)) return BadRequest("Username is taken");
 
         if (string.IsNullOrEmpty(registerDto.Username))
             return BadRequest("Username cannot be null or empty.");
@@ -39,7 +39,8 @@ public class AccountController(DataContext context, ITokenService tokenService, 
         {
             Username = user.UserName,
             Token = tokenService.CreateToken(user),
-            KnownAs = user.KnownAs
+            KnownAs = user.KnownAs,
+            Gender = user.Gender
         };
     }
 
@@ -84,7 +85,13 @@ public class AccountController(DataContext context, ITokenService tokenService, 
             Username = user.UserName,
             KnownAs = user.KnownAs,
             Token = tokenService.CreateToken(user),
-            PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url
+            PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
+            Gender = user.Gender
         };
+    }
+
+    private async Task<bool> UserExists(string username)
+    {
+        return await context.Users.AnyAsync(x => x.UserName == username.ToLower());
     }
 }

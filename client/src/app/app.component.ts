@@ -6,15 +6,11 @@ import { NavComponent } from './nav/nav.component';
 import { NgxSpinnerComponent } from 'ngx-spinner';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css'],
-    standalone: true,
-    imports: [
-        NgxSpinnerComponent,
-        NavComponent,
-        RouterOutlet,
-    ],
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
+  standalone: true,
+  imports: [NgxSpinnerComponent, NavComponent, RouterOutlet],
 })
 export class AppComponent implements OnInit {
   title = 'GeekMeet';

@@ -4,23 +4,23 @@
       >GeekMeet</a
     >
     <ul class="navbar-nav me-auto mb-2 mb-md-0">
-      <ng-container *ngIf="accountService.currentUser()">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/members" routerLinkActive="active"
-            >Matches</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/lists" routerLinkActive="active"
-            >Lists</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/messages" routerLinkActive="active"
-            >Messages</a
-          >
-        </li>
-      </ng-container>
+      @if (accountService.currentUser()) {
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/members" routerLinkActive="active"
+          >Matches</a
+        >
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/lists" routerLinkActive="active"
+          >Lists</a
+        >
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/messages" routerLinkActive="active"
+          >Messages</a
+        >
+      </li>
+      }
       <li class="nav-item">
         <a class="nav-link" routerLink="/errors" routerLinkActive="active"
           >Errors</a
@@ -28,7 +28,8 @@
       </li>
     </ul>
 
-    <div class="dropdown" *ngIf="accountService.currentUser()" dropdown>
+    @if (accountService.currentUser()) {
+    <div class="dropdown" dropdown>
       <img
         src="{{
           accountService.currentUser()?.photoUrl || './assets/user.png'
@@ -40,7 +41,7 @@
         class="dropdown-toggle text-light text-decoration-none ms-2"
         dropdownToggle
         (click)="(false)"
-        >Welcome {{ accountService.currentUser()?.username | titlecase }}</a
+        >Welcome {{ accountService.currentUser()?.knownAs }}</a
       >
       <ul class="dropdown-menu" *dropdownMenu>
         <li>
@@ -53,13 +54,12 @@
         </li>
       </ul>
     </div>
-
+    } @else {
     <form
       #loginForm="ngForm"
       class="d-flex"
       (ngSubmit)="login()"
       autocomplete="off"
-      *ngIf="!accountService.currentUser()"
     >
       <input
         name="username"
@@ -77,5 +77,6 @@
       />
       <button class="btn btn-success" type="submit">Login</button>
     </form>
+    }
   </div>
 </nav>

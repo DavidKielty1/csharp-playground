@@ -41,7 +41,7 @@ export class PhotoEditorComponent implements OnInit {
   }
 
   deletePhoto(photo: Photo) {
-    this.memberService.deletePhotos(photo.id).subscribe({
+    this.memberService.deletePhotos(photo).subscribe({
       next: (_) => {
         const updatedMember: Member = { ...this.member! };
         updatedMember.photos =
@@ -52,7 +52,7 @@ export class PhotoEditorComponent implements OnInit {
   }
 
   setMainPhoto(photo: Photo) {
-    this.memberService.setMainPhoto(photo.id).subscribe({
+    this.memberService.setMainPhoto(photo).subscribe({
       next: () => {
         const user = this.accountService.currentUser();
         if (user) {
