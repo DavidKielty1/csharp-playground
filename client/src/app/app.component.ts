@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AccountService } from './_services/account.service';
 import { User } from './_models/user';
 import { RouterOutlet } from '@angular/router';
@@ -10,12 +10,11 @@ import { NgxSpinnerComponent } from 'ngx-spinner';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   standalone: true,
-  imports: [NgxSpinnerComponent, NavComponent, RouterOutlet],
+  imports: [RouterOutlet, NavComponent, NgxSpinnerComponent, ],
 })
 export class AppComponent implements OnInit {
   title = 'GeekMeet';
-
-  constructor(private accountService: AccountService) {}
+  private accountService = inject(AccountService)
 
   ngOnInit(): void {
     this.setCurrentUser();
