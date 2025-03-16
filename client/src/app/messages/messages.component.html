@@ -23,8 +23,9 @@
     </div>
 </div>
 
-@if (!messageService.paginatedResult()?.items) {
-    <p>No messages found</p>
+@if (!messageService.paginatedResult()?.items || 
+    messageService.paginatedResult()?.items?.length === 0) {
+        <p class="text-center mt-5">No messages found</p>
 } @else {
     <table class="table table-hover mt-3" style="cursor: pointer">
         <thead>
@@ -42,25 +43,32 @@
                     <td>
                         <div>
                             <img 
-                            [src]="container === 'Outbox' 
+                            [src]="isOutbox 
                                 ? (message.recipientPhotoUrl || './assets/user.png') 
                                 : (message.senderPhotoUrl || './assets/user.png')" 
                             alt="image of user"
                             class="rounded-circle me-2">
-                            <strong>{{container === 'Outbox' 
+                            <strong>{{isOutbox 
                                 ? message.recipientUsername : message.senderUsername}}
                             </strong>
                         </div>
                     </td>
                     <td>{{message.messageSent | timeago}}</td>
-                    <td><button class="btn btn-danger">Delete</button></td>
+                    <td (click)="$event.stopPropagation()">
+                        <button 
+                        class="btn btn-danger" 
+                        (click)="deleteMessage(message.id)">
+                            Delete
+                        </button>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 }
 
-@if (messageService.paginatedResult()?.pagination) {
+@if (messageService.paginatedResult()?.pagination && 
+    messageService.paginatedResult()?.pagination?.totalItems! > 0) {
     <div class="d-flex justify-content-center mt-5">
       <pagination
         [boundaryLinks]="true"
@@ -76,5 +84,5 @@
       >
       </pagination>
     </div>
-    }
-    
+}
+
