@@ -1,37 +1,27 @@
-import {
-  provideHttpClient,
-  withInterceptors,
-  // withInterceptorsFromDi,
-} from '@angular/common/http';
+import { provideHttpClient,withInterceptors} from '@angular/common/http';
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { routes } from './app.routes';
 import { provideRouter } from '@angular/router';
 import { provideToastr } from 'ngx-toastr';
-import { jwtInterceptor } from './_interceptors/jwt.interceptor';
-import { routes } from './app.routes';
 import { errorInterceptor } from './_interceptors/error.interceptor';
-import { loadingInterceptor } from './_interceptors/loading.interceptor';
+import { jwtInterceptor } from './_interceptors/jwt.interceptor';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { loadingInterceptor } from './_interceptors/loading.interceptor';
 import { TimeagoModule } from 'ngx-timeago';
-import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ModalModule } from 'ngx-bootstrap/modal';
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideToastr({
-      positionClass: 'toast-bottom-right',
-    }),
+    provideHttpClient(withInterceptors([errorInterceptor, jwtInterceptor, loadingInterceptor])),
+    provideAnimations(),
+    provideToastr({positionClass: 'toast-bottom-right',}),
     importProvidersFrom(
-      BrowserModule,
-      FormsModule,
       NgxSpinnerModule,
-      BrowserAnimationsModule,
-      TimeagoModule.forRoot()
-    ),
-    provideHttpClient(
-      withInterceptors([errorInterceptor, jwtInterceptor, loadingInterceptor])
-      // withInterceptorsFromDi()
+      TimeagoModule.forRoot(),
+      ModalModule.forRoot()
     ),
   ],
 };

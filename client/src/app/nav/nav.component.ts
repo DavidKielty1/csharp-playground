@@ -4,13 +4,14 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { HasRoleDirective } from '../_directives/has-role.directive';
 
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.css'],
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, BsDropdownModule, FormsModule],
+  imports: [RouterLink, RouterLinkActive, BsDropdownModule, FormsModule, HasRoleDirective],
 })
 export class NavComponent implements OnInit {
   model: any = {};

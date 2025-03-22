@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
+
 [Authorize]
 public class UsersController(IUserRepository userRepository, IMapper mapper, IPhotoService photoService) : BaseApiController
 {
@@ -24,10 +25,18 @@ public class UsersController(IUserRepository userRepository, IMapper mapper, IPh
         return Ok(users);
     }
 
-    [HttpGet("{username}")]
+    [HttpGet("{username}")] //api.users/{name}
     public async Task<ActionResult<MemberDto>> GetUser(string username)
     {
-        return await userRepository.GetMemberAsync(username);
+        try
+        {
+            var user = await userRepository.GetMemberAsync(username);
+            return Ok(user);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(ex.Message);
+        }
     }
 
     [HttpPut]
