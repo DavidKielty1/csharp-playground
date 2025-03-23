@@ -20,6 +20,6 @@
     }
 </div>
 <div class="modal-footer">
-    <button class="btn btn-default" (click)="bsModalRef.hide()" type="button">Close</button>
+    <button [disabled]="selectedRoles.length === 0" class="btn btn-success" (click)="onSelectRoles()" type="button">Submit</button>
 </div>
 
