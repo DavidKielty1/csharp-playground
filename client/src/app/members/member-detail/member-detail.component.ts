@@ -5,10 +5,10 @@ import { GalleryItem, GalleryModule, ImageItem } from 'ng-gallery';
 import { TabDirective, TabsetComponent, TabsModule } from 'ngx-bootstrap/tabs';
 import { TimeagoModule } from 'ngx-timeago';
 import { Member } from 'src/app/_models/member';
-// import { MembersService } from 'src/app/_services/members.service';
 import { MemberMessagesComponent } from "../member-messages/member-messages.component";
 import { Message } from 'src/app/_models/message';
 import { MessageService } from 'src/app/_services/message.service';
+import { PresenceService } from 'src/app/_services/presence.service';
 
 @Component({
   selector: 'app-member-detail',
@@ -20,7 +20,7 @@ import { MessageService } from 'src/app/_services/message.service';
 export class MemberDetailComponent implements OnInit {
   @ViewChild('memberTabs', {static: true}) memberTabs?: TabsetComponent
   private messageService = inject(MessageService)
-  // private memberService = inject(MembersService)
+  presenceService = inject(PresenceService)
   private route = inject(ActivatedRoute)
   member: Member = {} as Member;
   images: GalleryItem[] = [];
@@ -63,19 +63,6 @@ export class MemberDetailComponent implements OnInit {
       })
     }
   }
-
-  // loadMember() {
-  //   const username = this.route.snapshot.paramMap.get('username');
-  //   if (!username) return;
-  //   this.memberService.getMember(username).subscribe({
-  //     next: (member) => {
-  //       this.member = member;
-  //       member.photos.map((p) => {
-  //         this.images.push(new ImageItem({ src: p.url, thumb: p.url }));
-  //       });
-  //     },
-  //   });
-  // }
 
   getImages() {
     if (!this.member) return;

@@ -11,7 +11,7 @@ export class PresenceService {
   hubUrl = environment.hubsUrl;
   private hubConnection?: HubConnection;
   private toastr: ToastrService = inject(ToastrService);
-
+  onlineUsers = signal<string[]>([]);
 
   createHubConnection(user: User) {
     this.hubConnection = new HubConnectionBuilder()
@@ -30,7 +30,12 @@ export class PresenceService {
     this.hubConnection.on('UserIsOffline', username => {
       this.toastr.warning(username + ' has disconnected');
     })
+
+    this.hubConnection?.on('GetOnlineUsers', (usernames: string[]) => {
+      this.onlineUsers.set(usernames);
+    })
   }
+
 
   stopHubConnection() {
     if (this.hubConnection?.state === HubConnectionState.Connected) {
