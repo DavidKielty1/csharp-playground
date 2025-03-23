@@ -17,7 +17,12 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([errorInterceptor, jwtInterceptor, loadingInterceptor])),
     provideAnimations(),
-    provideToastr({positionClass: 'toast-bottom-right',}),
+    provideToastr({
+      positionClass: 'toast-bottom-right',
+      timeOut: 3000,
+      progressBar: true,
+      preventDuplicates: true
+    }),
     importProvidersFrom(
       NgxSpinnerModule,
       TimeagoModule.forRoot(),
